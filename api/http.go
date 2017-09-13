@@ -10,9 +10,10 @@ import (
 )
 
 type ApiConf struct {
-	Listen string
-	Db     *storage.DB
-	GPGID  string
+	Listen   string
+	Db       *storage.DB
+	GPGID    string
+	Password string
 }
 
 // Server ...
@@ -20,6 +21,9 @@ func (conf ApiConf) Serve() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/register", conf.registrationHandler)
+	r.HandleFunc("/add", conf.addDataHandler)
+	r.HandleFunc("/add", conf.listDataHandler)
+
 	http.Handle("/", r)
 
 	srv := http.Server{

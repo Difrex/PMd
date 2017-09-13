@@ -63,13 +63,13 @@ func InitConnection(path string) (*DB, error) {
 
 // Create ...
 func (d *DB) CreateSchema() error {
-	usersTableSQL := `CREATE TABLE IF NOT EXISTS users(id INTEGER  PRIMARY KEY AUTOINCREMENT,
+	usersTableSQL := `CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,
                                                        gpgid varchar(42) NOT NULL UNIQUE);`
 
-	keysTableSQL := `CREATE TABLE IF NOT EXISTS keys(userid INTEGER PRIMARY KEY,
-                                                     time TIMESTAMP,
-                                                     version INT,
-                                                     data TEXT);`
+	keysTableSQL := `CREATE TABLE IF NOT EXISTS keys(version varchar(42) PRIMARY KEY NOT NULL UNIQUE,
+                                                     userid INTEGER NOT NULL,
+                                                     time TIMESTAMP NOT NULL,
+                                                     data TEXT NOT NULL);`
 
 	usersStmt, err := d.Conn.Prepare(usersTableSQL)
 	checkErr(err)

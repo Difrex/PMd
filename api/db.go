@@ -15,3 +15,8 @@ func (conf ApiConf) userAdd(gpgid string) (int, error) {
 
 	return userID, nil
 }
+
+// dataAdd ...
+func (conf ApiConf) dataAdd(gpgid, data string) {
+
+}

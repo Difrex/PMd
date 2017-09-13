@@ -9,6 +9,7 @@ import (
 // Status codes
 const (
 	OK             = 200
+	ACCESS_DENIED  = 403
 	NOT_ALLOWED    = 405
 	BAD_REQUEST    = 400
 	INTERNAL_ERROR = 500
