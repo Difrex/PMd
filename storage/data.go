@@ -58,8 +58,8 @@ func (db *DB) AddData(user User, data string) (AddState, error) {
 
 // List user uploaded versions
 type List struct {
-	Version string `json:"version"`
-	Time    int64  `json:"time"`
+	Version string    `json:"version"`
+	Time    time.Time `json:"time"`
 }
 
 // ListVersions list user data versions
@@ -81,7 +81,7 @@ func (db *DB) ListVersions(user User) ([]List, error) {
 
 	for rows.Next() {
 		var v string
-		var t int64
+		var t time.Time
 		err := rows.Scan(&v, &t)
 		if err != nil {
 			log.Error(err.Error())
@@ -91,6 +91,35 @@ func (db *DB) ListVersions(user User) ([]List, error) {
 	}
 
 	return list, nil
+}
+
+// GetUserData ...
+func (db *DB) GetUserData(user User, version string) (string, error) {
+	var data string
+
+	userID, err := db.findUserID(user)
+	if err != nil {
+		log.Error(err.Error())
+		return data, err
+	}
+
+	getSQL := `SELECT data FROM keys WHERE userid=? and version=?`
+	rows, err := db.Conn.Query(getSQL, userID, version)
+	if err != nil {
+		log.Error(err.Error())
+		return data, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&data)
+		log.Warn(data)
+		if err != nil {
+			log.Error(err.Error())
+			return data, err
+		}
+	}
+
+	return data, nil
 }
 
 // calculateSHA ...

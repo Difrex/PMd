@@ -32,8 +32,6 @@ func (conf ApiConf) addDataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	println(string(data))
-
 	// Verify signature
 	gpgid, content, err := verifyAndDetach(string(data))
 	if err != nil {

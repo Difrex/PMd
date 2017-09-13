@@ -15,6 +15,11 @@ const (
 	INTERNAL_ERROR = 500
 )
 
+type ErrorResponse struct {
+	State string `json:"state"`
+	Error string `json:"error"`
+}
+
 // readRequestBody ...
 func readRequestBody(r *http.Request) ([]byte, error) {
 	body, err := ioutil.ReadAll(r.Body)

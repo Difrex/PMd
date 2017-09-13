@@ -21,8 +21,9 @@ func (conf ApiConf) Serve() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/register", conf.registrationHandler)
-	r.HandleFunc("/add", conf.addDataHandler)
-	r.HandleFunc("/add", conf.listDataHandler)
+	r.HandleFunc("/push", conf.addDataHandler)
+	r.HandleFunc("/pull", conf.pullHandler)
+	r.HandleFunc("/list", conf.listDataHandler)
 
 	http.Handle("/", r)
 

@@ -20,6 +20,7 @@ func importPubKey(pubkey string) (string, error) {
 		return "", err
 	}
 
+	log.Warn(key.ID)
 	return key.ID, nil
 }
 
@@ -42,7 +43,15 @@ func verifyAndDetach(data string) (string, []byte, error) {
 		return "", []byte(""), e
 	}
 
-	return gpgid, content.Bytes(), nil
+	// Get long gpgid
+	key, err := gpg.ShowKey(gpgid)
+	if err != nil {
+		log.Error(err.Error())
+		e := errors.New("Cannot show key")
+		return "", []byte(""), e
+	}
+
+	return key.ID, content.Bytes(), nil
 }
 
 // encryptArmour gpg -e -a --recipient <gpgid>
