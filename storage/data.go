@@ -2,6 +2,7 @@ package storage
 
 import (
 	"encoding/base64"
+	"strings"
 	"time"
 
 	"crypto/sha256"
@@ -129,5 +130,7 @@ func calculateSHA(data string) string {
 	sum := h.Sum(nil)
 	b64 := base64.URLEncoding.EncodeToString(sum)
 
-	return b64
+	cut := strings.TrimRight(b64[len(b64)-8:], "=")
+
+	return cut
 }
