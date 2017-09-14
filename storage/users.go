@@ -43,30 +43,32 @@ func (db *DB) AddUser(user User) (int, error) {
 	return userID, nil
 }
 
+// PurgeUser - remove all user data and user
+func (db *DB) PurgeUser(user User) error {
+	err := db.deleteUserData(user)
+	if err != nil {
+		return err
+	}
+
+	log.Warn("User(" + user.GPGID + ") data deleted")
+
+	err = db.deleteUser(user)
+	if err != nil {
+		return err
+	}
+
+	log.Warn("User(" + user.GPGID + ") data")
+
+	return nil
+}
+
 // Deluser and delete all user data
-func (db *DB) DelUser(user User) error {
+func (db *DB) deleteUser(user User) error {
 	// Find user id
 	userID, err := db.findUserID(user)
 	if err != nil {
 		return err
 	}
-
-	// Delete user data
-	deleteDataSQL := `DELETE FROM keys WHERE userid=?`
-	deleteDataStmt, err := db.Conn.Prepare(deleteDataSQL)
-	if err != nil {
-		return err
-	}
-
-	res, err := deleteDataStmt.Exec(userID)
-	if err != nil {
-		return err
-	}
-	affected, err := res.RowsAffected()
-	if err != nil {
-		return err
-	}
-	log.Debug("User", user.GPGID, "data deleted:", affected)
 
 	// Delete user
 	deleteUserSQL := `DELETE FROM users WHERE userid=?`
@@ -79,6 +81,29 @@ func (db *DB) DelUser(user User) error {
 		return err
 	}
 	log.Info("User", user.GPGID, "deleted")
+
+	return nil
+}
+
+// deleteUserData ...
+func (db *DB) deleteUserData(user User) error {
+	userID, err := db.findUserID(user)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+
+	// Delete user data
+	deleteDataSQL := `DELETE FROM keys WHERE userid=?`
+	deleteDataStmt, err := db.Conn.Prepare(deleteDataSQL)
+	if err != nil {
+		return err
+	}
+
+	_, err = deleteDataStmt.Exec(userID)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
