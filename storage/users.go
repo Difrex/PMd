@@ -54,6 +54,7 @@ func (db *DB) PurgeUser(user User) error {
 
 	err = db.deleteUser(user)
 	if err != nil {
+		log.Error(err.Error())
 		return err
 	}
 
@@ -71,7 +72,7 @@ func (db *DB) deleteUser(user User) error {
 	}
 
 	// Delete user
-	deleteUserSQL := `DELETE FROM users WHERE userid=?`
+	deleteUserSQL := `DELETE FROM users WHERE id=?`
 	deleteUserStmt, err := db.Conn.Prepare(deleteUserSQL)
 	if err != nil {
 		return err
@@ -80,7 +81,7 @@ func (db *DB) deleteUser(user User) error {
 	if err != nil {
 		return err
 	}
-	log.Info("User", user.GPGID, "deleted")
+	log.Warn("User(", user.GPGID, ") deleted")
 
 	return nil
 }
