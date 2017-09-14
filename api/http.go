@@ -25,6 +25,7 @@ func (conf ApiConf) Serve() {
 	r.HandleFunc("/pull", conf.pullHandler)
 	r.HandleFunc("/list", conf.listDataHandler)
 	r.HandleFunc("/purge", conf.purgeUserHandler)
+	r.HandleFunc("/delete", conf.deleteDataHandler)
 
 	http.Handle("/", r)
 

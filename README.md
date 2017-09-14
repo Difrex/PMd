@@ -96,19 +96,35 @@ Return armored encrypted data with JSON structure:
     "versions": [
         {
             "time": "2017-09-13T13:40:58Z",
-            "version": "pjqzXjNL_hIpKt_gcXXgKEIb5Caile2wug0cmCcTx-k="
+            "version": "mCcTx-k"
         },
         {
             "time": "2017-09-13T13:41:10Z",
-            "version": "n-bST3_-TtA1d-4S1upjBO3c5tGQeBgonYa5G-WvhMo="
+            "version": "-WvhMo"
         }
     ]
 }
 ```
 
-## Delete data version
+## Delete data
 
-Not implemented yet
+Delete data
+
+Sign JSON and send it
+```
+{
+    "version": "-WvhMo"
+}
+curl -XPOST -d @signed https://pm.lessmore.pw/delete
+```
+
+Return JSON
+```
+{
+    "state": "ok",
+    "version": "-WvhMo"
+}
+```
 
 ## Selfdelete
 
@@ -117,4 +133,12 @@ Remove **all** user data and delete user.
 Send signed message
 ```
 curl -XPOST -d @signed https://pm.lessmore.pw/purge
+```
+
+Return JSON:
+```
+{
+    "state":"ok",
+    "gpgid":"5083F08AACD7CDBC"
+}
 ```

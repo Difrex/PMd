@@ -123,6 +123,30 @@ func (db *DB) GetUserData(user User, version string) (string, error) {
 	return data, nil
 }
 
+// DeleteData ...
+func (db *DB) DeleteData(user User, version string) error {
+	userID, err := db.findUserID(user)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+
+	deleteSQL := `DELETE FROM keys WHERE userid=? AND version=?`
+	deleteStmt, err := db.Conn.Prepare(deleteSQL)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+
+	_, err = deleteStmt.Exec(userID, version)
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+
+	return nil
+}
+
 // calculateSHA ...
 func calculateSHA(data string) string {
 	h := sha256.New()
