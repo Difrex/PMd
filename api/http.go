@@ -34,6 +34,6 @@ func (conf ApiConf) Serve() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	log.Print("Listening API on ", conf.Listen)
+	log.Info("Listening API on ", conf.Listen)
 	log.Fatal(srv.ListenAndServe())
 }

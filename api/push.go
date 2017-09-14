@@ -20,7 +20,7 @@ type AddResponse struct {
 // addDataHandler ...
 func (conf ApiConf) addDataHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		jsonResponse(w, NOT_ALLOWED, AddResponse{"Method not allowed", "error"})
+		jsonResponse(w, NOT_ALLOWED, ErrorResponse{"Method not allowed", "error"})
 		return
 	}
 
@@ -28,20 +28,20 @@ func (conf ApiConf) addDataHandler(w http.ResponseWriter, r *http.Request) {
 
 	data, err := readRequestBody(r)
 	if err != nil {
-		jsonResponse(w, BAD_REQUEST, AddResponse{err.Error(), "error"})
+		jsonResponse(w, BAD_REQUEST, ErrorResponse{err.Error(), "error"})
 		return
 	}
 
 	// Verify signature
 	gpgid, content, err := verifyAndDetach(string(data))
 	if err != nil {
-		jsonResponse(w, BAD_REQUEST, AddResponse{err.Error(), "error"})
+		jsonResponse(w, BAD_REQUEST, ErrorResponse{err.Error(), "error"})
 		return
 	}
 
 	err = json.Unmarshal(content, &req)
 	if err != nil {
-		jsonResponse(w, BAD_REQUEST, AddResponse{err.Error(), "error"})
+		jsonResponse(w, BAD_REQUEST, ErrorResponse{err.Error(), "error"})
 		return
 	}
 
@@ -50,7 +50,7 @@ func (conf ApiConf) addDataHandler(w http.ResponseWriter, r *http.Request) {
 		encrypted, err = conf.encryptArmour(req.Data, gpgid)
 		if err != nil {
 			log.Error(err.Error())
-			jsonResponse(w, INTERNAL_ERROR, AddResponse{"Smth went wrong! Cant encrypt data! Abort...", "error"})
+			jsonResponse(w, INTERNAL_ERROR, ErrorResponse{"Smth went wrong! Cant encrypt data! Abort...", "error"})
 			return
 		}
 	}
@@ -58,7 +58,7 @@ func (conf ApiConf) addDataHandler(w http.ResponseWriter, r *http.Request) {
 		GPGID: gpgid,
 	}, encrypted)
 	if err != nil {
-		jsonResponse(w, INTERNAL_ERROR, AddResponse{"Data already present", "error"})
+		jsonResponse(w, INTERNAL_ERROR, ErrorResponse{"Data already present", "error"})
 		return
 	}
 
