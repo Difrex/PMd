@@ -58,7 +58,7 @@ func (db *DB) PurgeUser(user User) error {
 		return err
 	}
 
-	log.Warn("User(" + user.GPGID + ") data")
+	log.Warn("User(" + user.GPGID + ") deleed")
 
 	return nil
 }
@@ -81,7 +81,6 @@ func (db *DB) deleteUser(user User) error {
 	if err != nil {
 		return err
 	}
-	log.Warn("User(", user.GPGID, ") deleted")
 
 	return nil
 }

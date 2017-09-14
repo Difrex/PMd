@@ -31,7 +31,7 @@ cat > reg.json <<EOF
     "pubkey": "$PUBKEY"
 }
 EOF
-curl -XPOST -d @reg.json https://pm.lessmore.pw
+curl -XPOST -d @reg.json https://pm.lessmore.pw/register
 ```
 
 Return JSON:
@@ -112,4 +112,9 @@ Not implemented yet
 
 ## Selfdelete
 
-Not implemented yet
+Remove **all** user data and delete user.
+
+Send signed message
+```
+curl -XPOST -d @signed https://pm.lessmore.pw/purge
+```
